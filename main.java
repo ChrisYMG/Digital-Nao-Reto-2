@@ -1,3 +1,10 @@
+// @author: Christian Yael Mejía Galindo
+// @description: Busca autores en Google Scholar
+// @param: api_key
+// @param: mauthor
+// @param: num
+// @return: json
+// @see: https://serpapi.com/google-scholar-profiles-api
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
