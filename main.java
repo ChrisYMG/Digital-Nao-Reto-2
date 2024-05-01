@@ -12,9 +12,9 @@ class ScholarSearch {
         this.apiKey = apiKey;
     }
 
-    public String search(String query, Integer num) throws Exception {
+    public String search(String mauthor, Integer num) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://serpapi.com/search.json?engine=google_scholar&q=" + query + "&num=" + num + "&key=" + apiKey))
+                .uri(URI.create("https://serpapi.com/search.json?engine=google_scholar_profiles&mauthors=" + mauthor + "&num=" + num + "&key=" + apiKey))
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -37,7 +37,7 @@ public class main {
         ScholarSearch model = new ScholarSearch(apiKey);
         ConsoleView view = new ConsoleView();
 
-        String result = model.search("biology", 5);
+        String result = model.search("unam", 10);
         view.display(result);
     }
 }
