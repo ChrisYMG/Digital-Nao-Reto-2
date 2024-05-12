@@ -9,6 +9,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Properties;
 
 // Modelo
 class ScholarSearch {
@@ -40,7 +43,13 @@ class ConsoleView {
 // Controlador
 public class main {
     public static void main(String[] args) throws Exception {
-        String apiKey = "api_key";
+        Properties prop = new Properties();
+        InputStream input = new FileInputStream("config.properties");
+        prop.load(input);
+
+        String api_key = prop.getProperty("API_KEY");
+
+        String apiKey = api_key;
         ScholarSearch model = new ScholarSearch(apiKey);
         ConsoleView view = new ConsoleView();
 
