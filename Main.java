@@ -1,10 +1,12 @@
 // @author: Christian Yael Mejía Galindo
-// @description: Busca autores en Google Scholar
-// @param: api_key
-// @param: mauthor
-// @param: num
-// @return: json
+// @description: Maneja la inserción de datos en la base de datos
+// @language: Java
+// @return: sube los datos a la base de datos
 // @see: https://serpapi.com/google-scholar-profiles-api
+// @require: ScholarSearch.java
+// @require: ConsoleView.java
+// @require: dbconnection.java
+// @require: config.properties
 // Controller
 import java.io.FileInputStream;
 import java.io.InputStream;

@@ -1,3 +1,10 @@
+// @author: Christian Yael Mejía Galindo
+// @description: Busca autores en Google Scholar
+// @language: Java
+// @param: api_key
+// @param: mauthor
+// @param: num
+// @return: json
 // Model
 import java.net.URI;
 import java.net.http.HttpClient;

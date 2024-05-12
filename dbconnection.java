@@ -1,3 +1,7 @@
+// @author: Christian Yael Mejía Galindo
+// @description: Conecta a la base de datos
+// @language: Java
+// @return: Conecta a la base de datos
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
