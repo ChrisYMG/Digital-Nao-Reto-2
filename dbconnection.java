@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.io.FileInputStream;
@@ -11,33 +12,44 @@ public class dbconnection {
     public static Connection connect() {
         Connection conn = null;
         try {
-            // Carga las propiedades desde el archivo config.properties.
+            // Load properties from the config.properties file.
             Properties prop = new Properties();
             InputStream input = new FileInputStream("config.properties");
             prop.load(input);
 
-            // Registra el controlador JDBC.
+            // Register the JDBC driver.
             Class.forName("com.mysql.cj.jdbc.Driver");
 
-            // Obtiene las propiedades.
+            // Get the properties.
             String dbUrl = prop.getProperty("DB_URL");
             String dbUser = prop.getProperty("DB_USER");
             String dbPass = prop.getProperty("DB_PASS");
+            String dbName = prop.getProperty("DB_NAME");
+            String dbTableName = prop.getProperty("DB_TABLE_NAME");
 
-            // Establece la conexión.
+            // Establish the connection.
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
-            System.out.println("Conexión a la base de datos exitosa!");
+            System.out.println("Database connection successful!");
 
-            // Crea la tabla.
-            String sql = "CREATE TABLE IF NOT EXISTS Authors (" +
-                         "name VARCHAR(50), " +
-                         "author_id VARCHAR(15), " +
-                         "email VARCHAR(50), " +
-                         "articles VARCHAR(100))";
+            // Check if the table already exists.
+            String checkSql = "SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = '" + dbName + "') AND (TABLE_NAME = '" + dbTableName + "')";
+            Statement checkStmt = conn.createStatement();
+            ResultSet rs = checkStmt.executeQuery(checkSql);
+            rs.next();
+            int count = rs.getInt(1);
 
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate(sql);
-            System.out.println("Tabla creada exitosamente!");
+            // If the table does not exist, create it.
+            if (count == 0) {
+                String sql = "CREATE TABLE " + dbTableName + " (" +
+                    "name VARCHAR(50), " +
+                    "author_id VARCHAR(15), " +
+                    "email VARCHAR(50), " +
+                    "articles VARCHAR(100))";
+
+                Statement stmt = conn.createStatement();
+                stmt.executeUpdate(sql);
+                System.out.println("Table created successfully!");
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();

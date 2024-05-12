@@ -1,14 +1,3 @@
-// @author: Christian Yael Mejía Galindo
-// @description: Busca autores en Google Scholar
-// @param: api_key
-// @param: mauthor
-// @param: num
-// @return: json
-// @see: https://serpapi.com/google-scholar-profiles-api
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
@@ -16,36 +5,10 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
-// Model
-class ScholarSearch {
-    private final HttpClient client = HttpClient.newHttpClient();
-    private final String apiKey;
-
-    public ScholarSearch(String apiKey) {
-        this.apiKey = apiKey;
-    }
-
-    public String search(String mauthor, Integer num) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://serpapi.com/search.json?engine=google_scholar_profiles&mauthors=" + mauthor + "&num=" + num + "&key=" + apiKey))
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        return response.body();
-    }
-}
-
-// View
-class ConsoleView {
-    public void display(String text) {
-        System.out.println(text);
-    }
-}
-
-// Controler
-public class main {
+public class Main {
     public static void main(String[] args) throws Exception {
         Properties prop = new Properties();
         InputStream input = new FileInputStream("config.properties");
@@ -59,6 +22,21 @@ public class main {
 
         // Database connection
         Connection conn = dbconnection.connect();
+
+        // Check if there are records in the Authors table
+        String checkSql = "SELECT COUNT(*) AS count FROM Authors";
+        Statement checkStmt = conn.createStatement();
+        ResultSet rs = checkStmt.executeQuery(checkSql);
+        rs.next();
+        int count = rs.getInt("count");
+
+        // If there are records, delete them
+        if (count > 0) {
+            String deleteSql = "DELETE FROM Authors";
+            Statement deleteStmt = conn.createStatement();
+            deleteStmt.executeUpdate(deleteSql);
+            view.display("Los datos se han borrado exitosamente en la tabla Authors.");
+        }
 
         String result = model.search("unam", 10);
         
