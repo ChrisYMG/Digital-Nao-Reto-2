@@ -1,13 +1,15 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class dbconnection {
-    public static void main(String[] args) {
+    public static Connection connect() {
+        Connection conn = null;
         try {
             // Carga las propiedades desde el archivo config.properties.
             Properties prop = new Properties();
@@ -23,9 +25,20 @@ public class dbconnection {
             String dbPass = prop.getProperty("DB_PASS");
 
             // Establece la conexión.
-            Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
+            conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
+            System.out.println("Conexión a la base de datos exitosa!");
 
-            System.out.println("Conexión exitosa!");
+            // Crea la tabla.
+            String sql = "CREATE TABLE IF NOT EXISTS Authors (" +
+                         "name VARCHAR(50), " +
+                         "author_id VARCHAR(15), " +
+                         "email VARCHAR(50), " +
+                         "articles VARCHAR(100))";
+
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(sql);
+            System.out.println("Tabla creada exitosamente!");
+
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -33,5 +46,6 @@ public class dbconnection {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return conn;
     }
 }
