@@ -52,7 +52,7 @@ public class dbconnection {
 
                 Statement stmt = conn.createStatement();
                 stmt.executeUpdate(sql);
-                System.out.println("Table created successfully!");
+                System.out.println("Tabla creada exitosamente!");
             }
 
         } catch (SQLException e) {
