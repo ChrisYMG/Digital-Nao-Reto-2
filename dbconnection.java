@@ -33,7 +33,7 @@ public class dbconnection {
 
             // Establish the connection.
             conn = DriverManager.getConnection(dbUrl, dbUser, dbPass);
-            System.out.println("Database connection successful!");
+            System.out.println("Conexión exitosa a la base de datos.");
 
             // Check if the table already exists.
             String checkSql = "SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = '" + dbName + "') AND (TABLE_NAME = '" + dbTableName + "')";
@@ -52,7 +52,7 @@ public class dbconnection {
 
                 Statement stmt = conn.createStatement();
                 stmt.executeUpdate(sql);
-                System.out.println("Tabla creada exitosamente!");
+                System.out.println("Tabla creada exitosamente");
             }
 
         } catch (SQLException e) {
